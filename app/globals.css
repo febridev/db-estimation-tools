@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 205 30% 96%;
+    --foreground: 210 45% 14%;
+    --card: 0 0% 100%;
+    --card-foreground: 210 45% 14%;
+    --primary: 186 72% 22%;
+    --primary-foreground: 180 40% 97%;
+    --muted: 205 24% 91%;
+    --muted-foreground: 208 16% 42%;
+    --border: 206 22% 84%;
+    --input: 206 22% 84%;
+    --ring: 186 72% 30%;
+    --safe: 158 64% 30%;
+    --warn: 36 86% 40%;
+    --danger: 356 68% 45%;
+    --radius: 0.4rem;
+  }
+
+  .dark {
+    --background: 205 38% 10%;
+    --foreground: 200 24% 92%;
+    --card: 205 32% 14%;
+    --card-foreground: 200 24% 92%;
+    --primary: 184 54% 58%;
+    --primary-foreground: 205 38% 10%;
+    --muted: 205 26% 20%;
+    --muted-foreground: 203 16% 68%;
+    --border: 205 22% 26%;
+    --input: 205 22% 26%;
+    --ring: 184 54% 58%;
+    --safe: 158 52% 48%;
+    --warn: 36 82% 58%;
+    --danger: 356 72% 62%;
+  }
+
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv05" 1;
+  }
+  /* Tabular figures everywhere a number can change under the reader's eye. */
+  .numeric {
+    font-variant-numeric: tabular-nums;
+    @apply font-mono;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
