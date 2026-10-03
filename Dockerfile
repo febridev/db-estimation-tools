@@ -6,22 +6,28 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 COPY . .
+# Karena output: export, perintah ini akan menghasilkan folder "out" (bukan .next)
 RUN npm run build
 
-# Stage 2: Runner (Image produksi)
-FROM node:18-alpine AS runner
-WORKDIR /app
+# Stage 2: Runner (Image produksi menggunakan Nginx)
+FROM nginx:alpine AS runner
 
-ENV NODE_ENV production
-ENV PORT 8001
+# Hapus aset bawaan Nginx
+RUN rm -rf /usr/share/nginx/html/*
 
-# Salin aset yang dibutuhkan dari stage builder
-COPY --from=builder /app/next.config.mjs ./
-# COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./
+# Buat konfigurasi Nginx internal untuk mengekspos port 8001 dan routing Next.js
+RUN echo "server { \
+    listen 8001; \
+    location / { \
+        root /usr/share/nginx/html; \
+        index index.html index.htm; \
+        try_files \$uri \$uri.html \$uri/ /index.html; \
+    } \
+}" > /etc/nginx/conf.d/default.conf
+
+# Salin aset statis hasil kompilasi dari stage builder
+COPY --from=builder /app/out /usr/share/nginx/html
 
 EXPOSE 8001
 
-CMD ["npm", "run", "start"]
+CMD ["nginx", "-g", "daemon off;"]
