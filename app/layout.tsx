@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
+import { AppLayout } from "@/components/app-layout";
 
 const sans = IBM_Plex_Sans({
   subsets: ["latin"],
@@ -14,7 +15,7 @@ const mono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Oracle index sizing",
+  title: "DB Tools — Oracle Index Estimator",
   description:
     "Estimate index segment, TEMP and UNDO requirements before running CREATE INDEX on a production Oracle database.",
 };
@@ -22,7 +23,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${sans.variable} ${mono.variable}`}>
-      <body>{children}</body>
+      <body>
+        <AppLayout>{children}</AppLayout>
+      </body>
     </html>
   );
 }

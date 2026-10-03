@@ -1,7 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/field";
 import { parseCreateTable } from "@/lib/ddl-parser";
@@ -19,7 +25,11 @@ const SAMPLE = `CREATE TABLE sales.order_line (
   CONSTRAINT pk_order_line PRIMARY KEY (order_id, line_no)
 );`;
 
-export function DdlInput({ onParsed }: { onParsed: (table: ParsedTable) => void }) {
+export function DdlInput({
+  onParsed,
+}: {
+  onParsed: (table: ParsedTable) => void;
+}) {
   const [sql, setSql] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [skipped, setSkipped] = useState<string[]>([]);
@@ -31,13 +41,32 @@ export function DdlInput({ onParsed }: { onParsed: (table: ParsedTable) => void 
     if (outcome.table) onParsed(outcome.table);
   }
 
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const content = event.target?.result as string;
+      setSql(content);
+      run(content);
+    };
+    reader.onerror = () => {
+      setError("Failed to read the file. Please try again.");
+    };
+    reader.readAsText(file);
+
+    // Reset the input so the same file can be selected again
+    e.target.value = "";
+  }
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>1 · Table definition</CardTitle>
         <CardDescription>
-          Paste the CREATE TABLE statement. Column widths are read from the declared
-          types, and you can correct them in the next step.
+          Paste the CREATE TABLE statement. Column widths are read from the
+          declared types, and you can correct them in the next step.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3">
@@ -48,6 +77,15 @@ export function DdlInput({ onParsed }: { onParsed: (table: ParsedTable) => void 
           placeholder="CREATE TABLE ..."
           onChange={(e) => setSql(e.target.value)}
         />
+        <div className="flex flex-wrap gap-2">
+          <span className="text-sm text-muted-foreground">OR</span>
+          <input
+            type="file"
+            accept=".sql,.ddl,.txt"
+            onChange={handleFileChange}
+            className="text-sm"
+          />
+        </div>
         <div className="flex flex-wrap gap-2">
           <Button onClick={() => run(sql)} disabled={!sql.trim()}>
             Read columns
