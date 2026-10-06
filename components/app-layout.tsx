@@ -14,6 +14,7 @@ const menuItems: MenuItem[] = [
     icon: "◉",
     children: [
       { id: "oracle-index", label: "Index Estimator", href: "/oracle/index-estimator", icon: "◈" },
+      { id: "oracle-capacity", label: "Tablespace Capacity", href: "/oracle/tablespace-capacity", icon: "◧" },
     ],
   },
   { id: "mysql", label: "MySQL Tool", href: "/mysql", icon: "⊞" },
@@ -25,6 +26,7 @@ const menuItems: MenuItem[] = [
 function getActiveId(): string | null {
   const path = typeof window !== "undefined" ? window.location.pathname : "";
   if (path.startsWith("/oracle/index-estimator")) return "oracle-index";
+  if (path.startsWith("/oracle/tablespace-capacity")) return "oracle-capacity";
   if (path.startsWith("/oracle")) return "oracle";
   if (path.startsWith("/mysql")) return "mysql";
   if (path.startsWith("/sql-server")) return "sql-server";

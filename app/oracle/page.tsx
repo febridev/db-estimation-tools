@@ -20,6 +20,15 @@ export default function OracleLanding() {
             Estimate segment size, TEMP space, and UNDO requirements before building a new index. Paste a CREATE TABLE statement and get production-ready SQL.
           </p>
         </a>
+        <a
+          href="/oracle/tablespace-capacity"
+          className="rounded-lg border bg-card p-6 transition-colors hover:bg-muted/50"
+        >
+          <h3 className="text-base font-semibold">Tablespace Capacity Plan</h3>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Upload DDL to estimate data and index tablespace needs based on block size, average row length, and retention period. Includes TEMP and UNDO sizing for bulk loads.
+          </p>
+        </a>
       </div>
     </main>
   );
